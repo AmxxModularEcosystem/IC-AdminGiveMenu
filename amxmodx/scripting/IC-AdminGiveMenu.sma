@@ -74,7 +74,7 @@ public plugin_precache() {
         menu_display(playerIndex, BuildPlayersMenu(
             .baseCommand = fmt("%s %d", GIVE_COMMAND, menuIndex),
             .menuTitle = fmt("\w%s^n\y%L", menu[GiveMenu_MenuTitle], playerIndex, "IC_ADMIN_GIVE_MENU_CHOOSE_PLAYER_TITLE"),
-            .firstPlayerIndex = playerIndex,
+            .firstPlayerIndex = is_user_alive(playerIndex) ? playerIndex : get_member(playerIndex, m_hObserverTarget),
             .allItemTitle = fmt("%L", playerIndex, "IC_ADMIN_GIVE_MENU_CHOOSE_PLAYER_ALL"),
             .allItemValue = 0,
             .searchFlags = "ah"
@@ -150,8 +150,11 @@ BuildPlayersMenu(
 ) {
     new menu = menu_create(menuTitle, "@MenuHandler_CommandWithDestroy");
     
+    new bool:hasFixed = false;
+
     if (allItemTitle[0] != EOS) {
         menu_additem(menu, fmt("\y%s^n", allItemTitle), fmt("%s %d", baseCommand, allItemValue));
+        hasFixed = true;
     }
     
     new players[MAX_PLAYERS], playersCount;
@@ -161,8 +164,14 @@ BuildPlayersMenu(
         for (new i = 0; i < playersCount; ++i) {
             if (players[i] == firstPlayerIndex) {
                 menu_additem(menu, fmt("\y%n^n", players[i]), fmt("%s %d", baseCommand, players[i]));
+                hasFixed = true;
+                break;
             }
         }
+    }
+
+    if (hasFixed) {
+        menu_addblank(menu, false);
     }
 
     for (new i = 0; i < playersCount; ++i) {
