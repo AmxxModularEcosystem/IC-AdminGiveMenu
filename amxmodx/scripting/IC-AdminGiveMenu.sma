@@ -153,7 +153,7 @@ BuildPlayersMenu(
     new bool:hasFixed = false;
 
     if (allItemTitle[0] != EOS) {
-        menu_additem(menu, fmt("\y%s^n", allItemTitle), fmt("%s %d", baseCommand, allItemValue));
+        menu_additem(menu, fmt("\y%s", allItemTitle), fmt("%s %d", baseCommand, allItemValue));
         hasFixed = true;
     }
     
@@ -163,7 +163,7 @@ BuildPlayersMenu(
     if (firstPlayerIndex > 0) {
         for (new i = 0; i < playersCount; ++i) {
             if (players[i] == firstPlayerIndex) {
-                menu_additem(menu, fmt("\y%n^n", players[i]), fmt("%s %d", baseCommand, players[i]));
+                menu_additem(menu, fmt("\y%n", players[i]), fmt("%s %d", baseCommand, players[i]));
                 hasFixed = true;
                 break;
             }
